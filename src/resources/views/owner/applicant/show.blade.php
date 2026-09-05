@@ -167,6 +167,11 @@
                                             応募者情報
                                         </h1>
                                     </div>
+                                    <div class="mt-6 text-center">
+                                        <span class="inline-flex items-center px-4 py-2 bg-gray-800 rounded-md text-xs font-semibold text-white">
+                                            応募状態: {{ $applicant->statusLabel() }}
+                                        </span>
+                                    </div>
                                     {{-- <span class="text-sm">{!! nl2br(e($job->description)) !!}</span> --}}
                                     <div class="flex justify-around mt-6 items-start pb-5 my-5">
                                         <div class="flex flex-col w-1/2 border-r-2 border-gray-300 pr-3">
@@ -237,26 +242,32 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flex justify-between mt-5">
-                            <div>
-                                <form
-                                    action="{{ route('owner.applicant.destroy', ['user' => $user->id, 'job' => $job->id]) }}"
-                                    method="post">
-                                    @csrf
-                                    <input type="submit" value="承諾しない" onclick="return confirm('承諾しないでよろしいですか？')"
-                                        class="inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150" />
-                                </form>
+                        @if ($applicant->isPending())
+                            <div class="flex justify-between mt-5">
+                                <div>
+                                    <form
+                                        action="{{ route('owner.applicant.destroy', ['user' => $user->id, 'job' => $job->id]) }}"
+                                        method="post">
+                                        @csrf
+                                        <input type="submit" value="不採用にする" onclick="return confirm('不採用にしてよろしいですか？')"
+                                            class="inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150" />
+                                    </form>
+                                </div>
+                                <div>
+                                    <form
+                                        action="{{ route('owner.applicant.consent', ['user' => $user->id, 'job' => $job->id]) }}"
+                                        method="post">
+                                        @csrf
+                                        <input type="submit" value="承諾する" onclick="return confirm('承諾してよろしいですか？')"
+                                            class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150" />
+                                    </form>
+                                </div>
                             </div>
-                            <div>
-                                <form
-                                    action="{{ route('owner.applicant.consent', ['user' => $user->id, 'job' => $job->id]) }}"
-                                    method="post">
-                                    @csrf
-                                    <input type="submit" value="承諾する" onclick="return confirm('承諾してよろしいですか？')"
-                                        class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150" />
-                                </form>
+                        @else
+                            <div class="flex justify-end mt-5">
+                                <x-a href="{{ route('owner.applicant.index') }}" class="bg-red-500 hover:bg-red-400">戻る</x-a>
                             </div>
-                        </div>
+                        @endif
                     </section>
                 </div>
             </div>

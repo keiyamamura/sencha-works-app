@@ -192,8 +192,20 @@
                                                         class="cursor-pointer inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150" />
                                                 </form>
                                             @else
-                                                <input type="submit" value="この求人は応募済みです" disabled
-                                                    class="cursor-pointer inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-800 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150" />
+                                                <div class="flex flex-col items-center gap-2">
+                                                    <input type="submit" value="{{ $applicant_list[$key]->statusLabel() }}" disabled
+                                                        class="cursor-pointer inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-800 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150" />
+                                                    @if ($applicant_list[$key]->isPending())
+                                                        <form
+                                                            action="{{ route('user.applicant.cancel', ['job' => $job->id]) }}"
+                                                            method="post">
+                                                            @csrf
+                                                            <input type="submit" value="応募をキャンセル"
+                                                                onclick="return confirm('応募をキャンセルしてよろしいですか？')"
+                                                                class="cursor-pointer inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-400 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150" />
+                                                        </form>
+                                                    @endif
+                                                </div>
                                             @endif
                                         </div>
 

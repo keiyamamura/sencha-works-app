@@ -35,6 +35,9 @@
                                                     現在の職業</th>
                                                 <th
                                                     class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
+                                                    応募状態</th>
+                                                <th
+                                                    class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
                                                 </th>
                                             </tr>
                                         </thead>
@@ -52,6 +55,8 @@
                                                         {{ $applicant->user->age }}歳</td>
                                                     <td class="border-t-2 border-b-2 border-gray-200 px-4 py-3">
                                                         {{ $current_jobs[$key] }}</td>
+                                                    <td class="border-t-2 border-b-2 border-gray-200 px-4 py-3">
+                                                        {{ $applicant->statusLabel() }}</td>
                                                     <td class="border-t-2 border-b-2 border-gray-200 px-4 py-3">
                                                         <a href="{{ route('owner.applicant.show', ['user' => $applicant->user->id, 'job' => $applicant->job->id]) }}"
                                                             class="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0">確認する
