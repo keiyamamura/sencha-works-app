@@ -7,6 +7,39 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Docker
+
+Project layout:
+
+```text
+.
+├── docker
+│   ├── docker-compose.yml
+│   └── php
+│       ├── Dockerfile
+│       └── entrypoint.sh
+└── src
+    └── Laravel application files
+```
+
+```bash
+docker compose -f docker/docker-compose.yml up --build
+```
+
+Open http://localhost:8000 in your browser.
+
+Run migrations after the database is ready:
+
+```bash
+docker compose -f docker/docker-compose.yml exec app php artisan migrate
+```
+
+If you need sample data:
+
+```bash
+docker compose -f docker/docker-compose.yml exec app php artisan db:seed
+```
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

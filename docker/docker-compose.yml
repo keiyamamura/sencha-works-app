@@ -1,0 +1,47 @@
+name: sencha-works-app
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/php/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../src:/var/www/html
+      - composer-cache:/tmp/composer-cache
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8000
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: sencha_works
+      DB_USERNAME: sencha
+      DB_PASSWORD: secret
+      COMPOSER_CACHE_DIR: /tmp/composer-cache
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: sencha_works
+      MYSQL_USER: sencha
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-psecret"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  composer-cache:
+  mysql-data:
