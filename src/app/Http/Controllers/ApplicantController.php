@@ -9,11 +9,9 @@ use App\Models\User;
 use App\Models\Job;
 use App\Models\Applicant;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use App\Jobs\SendConsentMail;
 use App\Jobs\SendApplicantMail;
-use App\Mail\NotAdoptedMail;
-use Illuminate\Support\Facades\DB;
+use App\Jobs\SendNotAdoptedMail;
 
 class ApplicantController extends Controller
 {
@@ -150,10 +148,13 @@ class ApplicantController extends Controller
                 ]);
         }
 
-        $applicant = Applicant::findOrFail($applicant->id);
+        $applicant = Applicant::with(['user', 'job'])->findOrFail($applicant->id);
+        $user = $applicant->user;
+        $job = $applicant->job;
+
         $applicant->delete();
 
-        Mail::to($applicant->user)->send(new NotAdoptedMail($applicant));
+        SendNotAdoptedMail::dispatch($user, $job);
 
         return redirect()
             ->route('owner.applicant.index')

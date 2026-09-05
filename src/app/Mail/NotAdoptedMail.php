@@ -11,15 +11,18 @@ class NotAdoptedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $applicant;
+    public $user;
+    public $job;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($applicant)
+    public function __construct($user, $job)
     {
-        $this->applicant = $applicant;
+        $this->user = $user;
+        $this->job = $job;
     }
 
     /**
@@ -33,8 +36,8 @@ class NotAdoptedMail extends Mailable
             ->subject('不採用通知のお知らせ')
             ->view('emails.not_adopted')
             ->with([
-                'user' => $this->applicant->user,
-                'job'  => $this->applicant->job
+                'user' => $this->user,
+                'job'  => $this->job
             ]);
     }
 }

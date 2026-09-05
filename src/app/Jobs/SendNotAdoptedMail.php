@@ -2,27 +2,30 @@
 
 namespace App\Jobs;
 
+use App\Mail\NotAdoptedMail;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\TestMail;
 
-class SendThanksMail implements ShouldQueue
+class SendNotAdoptedMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public $user;
+    public $job;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($user, $job)
     {
-        //
+        $this->user = $user;
+        $this->job = $job;
     }
 
     /**
@@ -32,6 +35,6 @@ class SendThanksMail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to('test@example.com')->send(new TestMail());
+        Mail::to($this->user)->send(new NotAdoptedMail($this->user, $this->job));
     }
 }
