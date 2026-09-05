@@ -5,13 +5,22 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Services\CheckForm;
 use App\Models\User;
+use App\Mail\TestMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Jobs\SendThanksMail;
 
 class InfoController extends Controller
 {
     public function show($id)
     {
+        // 同期処理
+        // Mail::to('test@example.com')->send(new TestMail());
+
+        // 非同期処理
+        SendThanksMail::dispatch();
+        
         $user = User::findOrFail($id);
         if ($user->id !== Auth::id()) {
             return redirect()

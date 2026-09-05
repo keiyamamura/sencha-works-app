@@ -36,7 +36,8 @@ return [
 
         'database' => [
             'driver' => 'database',
-            'table' => 'emails',
+            // 'table' => 'jobs',
+            'table' => 'async_jobs',
             'queue' => 'default',
             'retry_after' => 90,
             'after_commit' => false,
