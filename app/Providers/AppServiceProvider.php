@@ -23,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // ownerから始まるURL
+        if (request()->is('owner*')) {
+            config(['session.cookie' => config('session.cookie_owner')]);
+        }
     }
 }

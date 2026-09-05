@@ -19,10 +19,24 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'age',
+        'gender',
         'email',
+        'prefectures_id',
+        'municipalities',
+        'current_job',
         'password',
     ];
 
+    public function applicants()
+    {
+        return $this->hasMany(Applicant::class);
+    }
+
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
     /**
      * The attributes that should be hidden for serialization.
      *
