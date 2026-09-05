@@ -28,6 +28,19 @@ docker compose -f docker/docker-compose.yml up --build
 
 Open http://localhost:8000 in your browser.
 
+Open phpMyAdmin at http://localhost:8080.
+
+Database login:
+
+```text
+Server: mysql
+Username: sencha
+Password: secret
+Database: sencha_works
+```
+
+If you connect from a host-side database client, use `127.0.0.1:3307`.
+
 Run migrations after the database is ready:
 
 ```bash
