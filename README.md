@@ -1,8 +1,8 @@
 # sencha-works-app
 
-Laravel 8 application for Sencha Works.
+Sencha Works 用の Laravel 8 アプリケーションです。
 
-## Directory
+## ディレクトリ構成
 
 ```text
 .
@@ -12,30 +12,30 @@ Laravel 8 application for Sencha Works.
 │       ├── Dockerfile
 │       └── entrypoint.sh
 └── src
-    └── Laravel application files
+    └── Laravel アプリケーション本体
 ```
 
-## Start
+## 起動
 
 ```bash
 docker compose -f docker/docker-compose.yml up -d --build
 ```
 
-Open the application:
+アプリケーション:
 
 ```text
 http://localhost:8000
 ```
 
-## Database
+## データベース
 
-Run migrations:
+マイグレーション:
 
 ```bash
 docker compose -f docker/docker-compose.yml exec app php artisan migrate
 ```
 
-Run seeders:
+シーディング:
 
 ```bash
 docker compose -f docker/docker-compose.yml exec app php artisan db:seed
@@ -43,32 +43,32 @@ docker compose -f docker/docker-compose.yml exec app php artisan db:seed
 
 ## phpMyAdmin
 
-Open phpMyAdmin:
+phpMyAdmin:
 
 ```text
 http://localhost:8080
 ```
 
-Login:
+ログイン情報:
 
 ```text
-Server: mysql
-Username: sencha
-Password: secret
-Database: sencha_works
+サーバ: mysql
+ユーザー名: sencha
+パスワード: secret
+データベース: sencha_works
 ```
 
-For host-side database clients, connect to `127.0.0.1:3307`.
+ホスト側のDBクライアントから接続する場合は、`127.0.0.1:3307` を使用してください。
 
-## Mail
+## メール確認
 
-Open the mail inbox:
+開発環境では Mailpit で送信メールを確認できます。
 
 ```text
 http://localhost:8025
 ```
 
-## Stop
+## 停止
 
 ```bash
 docker compose -f docker/docker-compose.yml down
