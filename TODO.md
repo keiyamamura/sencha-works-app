@@ -114,6 +114,11 @@
 
 ### Docker 開発環境の仕上げ
 
+- [x] Docker起動安定化の調査
+  - [x] `app` コンテナにヘルスチェックを追加
+  - [x] 各サービスに `restart: unless-stopped` を追加
+  - [x] 起動時に `APP_KEY` を毎回再生成しないように修正
+  - [x] `http://localhost:8000` / `/login` / `/owner/login` / phpMyAdmin / Mailpit の応答確認
 - [ ] Node ビルド環境の追加
 - [ ] フロント assets のビルド手順整理
 - [ ] README の起動・停止・初期化手順の更新
