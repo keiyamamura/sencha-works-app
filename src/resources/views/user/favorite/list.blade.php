@@ -92,6 +92,17 @@
                                                             </div>
                                                         </div> {{-- /Status --}}
 
+                                                        <div class="p-2 w-full">
+                                                            <div class="relative">
+                                                                <x-label for="recruitment_status" :value="__('募集状態')" />
+
+                                                                <x-input id="recruitment_status" type="text"
+                                                                    name="recruitment_status"
+                                                                    value="{{ $recruitment_status[$key] }}" disabled
+                                                                    class="block mt-1 w-full bg-gray-300 bg-opacity-50" />
+                                                            </div>
+                                                        </div>
+
                                                         {{-- Salaly --}}
                                                         <div class="p-2 w-full">
                                                             <div class="relative">
@@ -184,7 +195,10 @@
                                                         class="cursor-pointer inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-400 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150" />
                                                 </form>
                                             @endif
-                                            @if (is_null($applicant_list[$key]))
+                                            @if (is_null($applicant_list[$key]) && (int) $job->recruitment_status !== 1)
+                                                <input type="submit" value="募集終了" disabled
+                                                    class="cursor-pointer inline-flex items-center px-4 py-2 bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest disabled:opacity-25 transition ease-in-out duration-150" />
+                                            @elseif (is_null($applicant_list[$key]))
                                                 <form
                                                     action="{{ route('user.applicant.create', ['job' => $job->id]) }}"
                                                     method="get">

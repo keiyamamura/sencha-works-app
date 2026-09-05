@@ -92,6 +92,17 @@
                                                             </div>
                                                         </div> {{-- /Status --}}
 
+                                                        <div class="p-2 w-full">
+                                                            <div class="relative">
+                                                                <x-label for="recruitment_status" :value="__('募集状態')" />
+
+                                                                <x-input id="recruitment_status" type="text"
+                                                                    name="recruitment_status"
+                                                                    value="{{ $recruitment_status[$key] }}" disabled
+                                                                    class="block mt-1 w-full bg-gray-300 bg-opacity-50" />
+                                                            </div>
+                                                        </div>
+
                                                         {{-- Salaly --}}
                                                         <div class="p-2 w-full">
                                                             <div class="relative">

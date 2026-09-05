@@ -51,6 +51,17 @@
                                                 </div>
                                             </div> {{-- /Status --}}
 
+                                            <div class="p-2">
+                                                <div class="relative">
+                                                    <x-label for="recruitment_status" :value="__('募集状態')" />
+
+                                                    <x-input id="recruitment_status" type="text"
+                                                        name="recruitment_status"
+                                                        value="{{ $recruitment_status }}" disabled
+                                                        class="block mt-1 w-full bg-gray-300 bg-opacity-50" />
+                                                </div>
+                                            </div>
+
                                             {{-- Salaly --}}
                                             <div class="p-2 w-full">
                                                 <div class="relative">
@@ -146,7 +157,10 @@
                             <x-a href="{{ route('user.dashboard') }}" class="bg-red-500 hover:bg-red-400">戻る</x-a>
 
                             <div class="text-center">
-                                @if ($applicant_list->isEmpty())
+                                @if ($applicant_list->isEmpty() && !$job->isRecruiting())
+                                    <input type="submit" value="募集終了" disabled
+                                        class="inline-flex items-center px-4 py-2 bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest disabled:opacity-25 transition ease-in-out duration-150" />
+                                @elseif ($applicant_list->isEmpty())
                                     <div>
                                         <form action="{{ route('user.applicant.create', ['job' => $job->id]) }}"
                                             method="get">

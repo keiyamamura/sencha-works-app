@@ -21,6 +21,7 @@ class FavoriteController extends Controller
 
         $prefecture = [];
         $status = [];
+        $recruitment_status = [];
         $experience = [];
         $license = [];
         $age_limit = [];
@@ -30,6 +31,7 @@ class FavoriteController extends Controller
         foreach ($favorites as $key => $job) {
             $prefecture[] = CheckForm::prefecture($job->prefectures_id);
             $status[]     = CheckForm::status($job->status);
+            $recruitment_status[] = CheckForm::recruitment_status($job->recruitment_status);
             $experience[] = CheckForm::experience($job->experience);
             $license[]    = CheckForm::license($job->license);
             $age_limit[]  = CheckForm::age_limit($job->age);
@@ -37,7 +39,7 @@ class FavoriteController extends Controller
             $favorite[] = Favorite::where('user_id', Auth::id())->where('job_id', $job->id)->first();
         }
 
-        return view('user.favorite.list', compact('favorites', 'prefecture', 'status', 'experience', 'license', 'age_limit', 'applicant_list', 'favorite'));
+        return view('user.favorite.list', compact('favorites', 'prefecture', 'status', 'recruitment_status', 'experience', 'license', 'age_limit', 'applicant_list', 'favorite'));
     }
 
     public function store(int $user, $job)

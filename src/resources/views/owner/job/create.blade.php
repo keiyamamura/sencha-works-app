@@ -212,6 +212,22 @@
                                                     </select>
                                                 </div>
                                             </div> {{-- /Status --}}
+
+                                            <div class="p-2 w-full">
+                                                <div class="relative">
+                                                    <x-label for="recruitment_status" :value="__('募集状態')" />
+                                                    <select name="recruitment_status" id="recruitment_status" required
+                                                        class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full">
+                                                        <option value="">選択してください</option>
+                                                        <option value="1"
+                                                            {{ old('recruitment_status', 1) == 1 ? 'selected' : '' }}>
+                                                            募集中</option>
+                                                        <option value="2"
+                                                            {{ old('recruitment_status') == 2 ? 'selected' : '' }}>
+                                                            募集終了</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div> {{-- /Left --}}
 

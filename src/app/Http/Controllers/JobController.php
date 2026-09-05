@@ -21,6 +21,7 @@ class JobController extends Controller
         'description',
         'prefectures_id',
         'status',
+        'recruitment_status',
         'wage_type',
         'salary_amount',
         'age',
@@ -42,6 +43,7 @@ class JobController extends Controller
 
         $prefecture = [];
         $status = [];
+        $recruitment_status = [];
         $experience = [];
         $license = [];
         $age_limit = [];
@@ -49,20 +51,74 @@ class JobController extends Controller
         foreach ($jobs as $key => $job) {
             $prefecture[] = CheckForm::prefecture($job->prefectures_id);
             $status[]     = CheckForm::status($job->status);
+            $recruitment_status[] = CheckForm::recruitment_status($job->recruitment_status);
             $experience[] = CheckForm::experience($job->experience);
             $license[]    = CheckForm::license($job->license);
             $age_limit[]  = CheckForm::age_limit($job->age);
         }
 
-        return view('owner.dashboard', compact('jobs', 'prefecture', 'status', 'experience', 'license', 'age_limit'));
+        return view('owner.dashboard', compact('jobs', 'prefecture', 'status', 'recruitment_status', 'experience', 'license', 'age_limit'));
     }
 
-    public function list()
+    public function list(Request $request)
     {
-        $jobs = Job::orderby('created_at', 'desc')->paginate(5);
+        $filters = $request->validate([
+            'prefectures_id' => 'nullable|integer|between:1,47',
+            'status' => 'nullable|integer|between:1,3',
+            'recruitment_status' => 'nullable|integer|between:1,2',
+            'wage_type' => 'nullable|in:0,1',
+            'salary_min' => 'nullable|integer|min:0',
+            'salary_max' => 'nullable|integer|min:0|gte:salary_min',
+            'age' => 'nullable|integer|between:1,5',
+            'license' => 'nullable|integer|between:1,3',
+            'experience' => 'nullable|integer|between:1,2',
+        ]);
+
+        $jobsQuery = Job::query();
+
+        if ($request->filled('prefectures_id')) {
+            $jobsQuery->where('prefectures_id', $filters['prefectures_id']);
+        }
+
+        if ($request->filled('status')) {
+            $jobsQuery->where('status', $filters['status']);
+        }
+
+        if ($request->filled('recruitment_status')) {
+            $jobsQuery->where('recruitment_status', $filters['recruitment_status']);
+        }
+
+        if ($request->has('wage_type') && $request->input('wage_type') !== '') {
+            $jobsQuery->where('wage_type', $filters['wage_type']);
+        }
+
+        if ($request->filled('salary_min')) {
+            $jobsQuery->where('salary_amount', '>=', $filters['salary_min']);
+        }
+
+        if ($request->filled('salary_max')) {
+            $jobsQuery->where('salary_amount', '<=', $filters['salary_max']);
+        }
+
+        if ($request->filled('age')) {
+            $jobsQuery->where('age', $filters['age']);
+        }
+
+        if ($request->filled('license')) {
+            $jobsQuery->where('license', $filters['license']);
+        }
+
+        if ($request->filled('experience')) {
+            $jobsQuery->where('experience', $filters['experience']);
+        }
+
+        $jobs = $jobsQuery->orderby('created_at', 'desc')
+            ->paginate(5)
+            ->appends($request->query());
 
         $prefecture = [];
         $status = [];
+        $recruitment_status = [];
         $experience = [];
         $license = [];
         $age_limit = [];
@@ -72,6 +128,7 @@ class JobController extends Controller
         foreach ($jobs as $key => $job) {
             $prefecture[] = CheckForm::prefecture($job->prefectures_id);
             $status[]     = CheckForm::status($job->status);
+            $recruitment_status[] = CheckForm::recruitment_status($job->recruitment_status);
             $experience[] = CheckForm::experience($job->experience);
             $license[]    = CheckForm::license($job->license);
             $age_limit[]  = CheckForm::age_limit($job->age);
@@ -79,8 +136,17 @@ class JobController extends Controller
             $favorite[] = Favorite::where('user_id', Auth::id())->where('job_id', $job->id)->first();
         }
 
+        $searchOptions = [
+            'prefectures' => CheckForm::prefectureOptions(),
+            'statuses' => CheckForm::statusOptions(),
+            'recruitmentStatuses' => CheckForm::recruitmentStatusOptions(),
+            'wageTypes' => CheckForm::wageTypeOptions(),
+            'ageLimits' => CheckForm::ageLimitOptions(),
+            'licenses' => CheckForm::licenseOptions(),
+            'experiences' => CheckForm::experienceOptions(),
+        ];
 
-        return view('user.dashboard', compact('jobs', 'prefecture', 'status', 'experience', 'license', 'age_limit', 'applicant_list', 'favorite'));
+        return view('user.dashboard', compact('jobs', 'prefecture', 'status', 'recruitment_status', 'experience', 'license', 'age_limit', 'applicant_list', 'favorite', 'filters', 'searchOptions'));
     }
 
     /**
@@ -121,11 +187,12 @@ class JobController extends Controller
 
         $prefecture = CheckForm::prefecture($input['prefectures_id']);
         $status     = CheckForm::status($input['status']);
+        $recruitment_status = CheckForm::recruitment_status($input['recruitment_status']);
         $experience = CheckForm::experience($input['experience']);
         $license    = CheckForm::license($input['license']);
         $age_limit  = CheckForm::age_limit($input['age']);
 
-        return view('owner.job.confirm', compact('input', 'prefecture', 'status', 'experience', 'license', 'age_limit', 'imagePath'));
+        return view('owner.job.confirm', compact('input', 'prefecture', 'status', 'recruitment_status', 'experience', 'license', 'age_limit', 'imagePath'));
     }
 
     /**
@@ -177,6 +244,7 @@ class JobController extends Controller
 
         $prefecture = CheckForm::prefecture($job->prefectures_id);
         $status     = CheckForm::status($job->status);
+        $recruitment_status = CheckForm::recruitment_status($job->recruitment_status);
         $experience = CheckForm::experience($job->experience);
         $license    = CheckForm::license($job->license);
         $age_limit  = CheckForm::age_limit($job->age);
@@ -185,7 +253,7 @@ class JobController extends Controller
 
         $applicant_list = Applicant::where('user_id', Auth::id())->where('job_id', $id)->get();
 
-        return view('user.job.show', compact('job', 'prefecture', 'status', 'experience', 'license', 'age_limit', 'applicant_list', 'favorite'));
+        return view('user.job.show', compact('job', 'prefecture', 'status', 'recruitment_status', 'experience', 'license', 'age_limit', 'applicant_list', 'favorite'));
     }
 
     /**
@@ -241,6 +309,7 @@ class JobController extends Controller
         $job->description    = $request->description;
         $job->prefectures_id = $request->prefectures_id;
         $job->status         = $request->status;
+        $job->recruitment_status = $request->recruitment_status;
         $job->wage_type      = $request->wage_type;
         $job->salary_amount  = $request->salary_amount;
         $job->age            = $request->age;

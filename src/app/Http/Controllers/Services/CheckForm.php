@@ -5,6 +5,112 @@ namespace App\Http\Controllers\Services;
 
 class CheckForm
 {
+    public static function prefectureOptions()
+    {
+        return [
+            1 => '北海道',
+            2 => '青森県',
+            3 => '岩手県',
+            4 => '宮城県',
+            5 => '秋田県',
+            6 => '山形県',
+            7 => '福島県',
+            8 => '茨城県',
+            9 => '栃木県',
+            10 => '群馬県',
+            11 => '埼玉県',
+            12 => '千葉県',
+            13 => '東京都',
+            14 => '神奈川県',
+            15 => '新潟県',
+            16 => '富山県',
+            17 => '石川県',
+            18 => '福井県',
+            19 => '山梨県',
+            20 => '長野県',
+            21 => '岐阜県',
+            22 => '静岡県',
+            23 => '愛知県',
+            24 => '三重県',
+            25 => '滋賀県',
+            26 => '京都府',
+            27 => '大阪府',
+            28 => '兵庫県',
+            29 => '奈良県',
+            30 => '和歌山県',
+            31 => '鳥取県',
+            32 => '島根県',
+            33 => '岡山県',
+            34 => '広島県',
+            35 => '山口県',
+            36 => '徳島県',
+            37 => '香川県',
+            38 => '愛媛県',
+            39 => '高知県',
+            40 => '福岡県',
+            41 => '佐賀県',
+            42 => '長崎県',
+            43 => '熊本県',
+            44 => '大分県',
+            45 => '宮崎県',
+            46 => '鹿児島県',
+            47 => '沖縄県',
+        ];
+    }
+
+    public static function statusOptions()
+    {
+        return [
+            1 => '正社員',
+            2 => '派遣',
+            3 => 'アルバイト',
+        ];
+    }
+
+    public static function wageTypeOptions()
+    {
+        return [
+            0 => '月給',
+            1 => '時給',
+        ];
+    }
+
+    public static function recruitmentStatusOptions()
+    {
+        return [
+            1 => '募集中',
+            2 => '募集終了',
+        ];
+    }
+
+    public static function ageLimitOptions()
+    {
+        return [
+            1 => '~19歳',
+            2 => '20歳~29歳',
+            3 => '30歳~39歳',
+            4 => '40歳~',
+            5 => '年齢制限なし',
+        ];
+    }
+
+    public static function licenseOptions()
+    {
+        return [
+            1 => 'AT',
+            2 => 'MT',
+            3 => '不問',
+        ];
+    }
+
+    public static function experienceOptions()
+    {
+        return [
+            1 => '経験者',
+            2 => '未経験者歓迎',
+        ];
+    }
+
     public static function gender($data)
     {
         $gender = '';
@@ -185,233 +291,49 @@ class CheckForm
 
     public static function prefecture($data)
     {
-        $prefecture = '';
-
-        if ($data == 1) {
-            $prefecture = '北海道';
-        }
-        if ($data == 2) {
-            $prefecture = '青森県';
-        }
-        if ($data == 3) {
-            $prefecture = '岩手県';
-        }
-        if ($data == 4) {
-            $prefecture = '宮城県';
-        }
-        if ($data == 5) {
-            $prefecture = '秋田県';
-        }
-        if ($data == 6) {
-            $prefecture = '山形県';
-        }
-        if ($data == 7) {
-            $prefecture = '福島県';
-        }
-        if ($data == 8) {
-            $prefecture = '茨城県';
-        }
-        if ($data == 9) {
-            $prefecture = '栃木県';
-        }
-        if ($data == 10) {
-            $prefecture = '群馬県';
-        }
-        if ($data == 11) {
-            $prefecture = '埼玉県';
-        }
-        if ($data == 12) {
-            $prefecture = '千葉県';
-        }
-        if ($data == 13) {
-            $prefecture = '東京都';
-        }
-        if ($data == 14) {
-            $prefecture = '神奈川';
-        }
-        if ($data == 15) {
-            $prefecture = '新潟県';
-        }
-        if ($data == 16) {
-            $prefecture = '富山県';
-        }
-        if ($data == 17) {
-            $prefecture = '石川県';
-        }
-        if ($data == 18) {
-            $prefecture = '福井県';
-        }
-        if ($data == 19) {
-            $prefecture = '山梨県';
-        }
-        if ($data == 20) {
-            $prefecture = '長野県';
-        }
-        if ($data == 21) {
-            $prefecture = '岐阜県';
-        }
-        if ($data == 22) {
-            $prefecture = '静岡県';
-        }
-        if ($data == 23) {
-            $prefecture = '愛知県';
-        }
-        if ($data == 24) {
-            $prefecture = '三重県';
-        }
-        if ($data == 25) {
-            $prefecture = '滋賀県';
-        }
-        if ($data == 26) {
-            $prefecture = '京都府';
-        }
-        if ($data == 27) {
-            $prefecture = '大阪府';
-        }
-        if ($data == 28) {
-            $prefecture = '兵庫県';
-        }
-        if ($data == 29) {
-            $prefecture = '奈良県';
-        }
-        if ($data == 30) {
-            $prefecture = '和歌山';
-        }
-        if ($data == 31) {
-            $prefecture = '鳥取県';
-        }
-        if ($data == 32) {
-            $prefecture = '島根県';
-        }
-        if ($data == 33) {
-            $prefecture = '岡山県';
-        }
-        if ($data == 34) {
-            $prefecture = '広島県';
-        }
-        if ($data == 35) {
-            $prefecture = '山口県';
-        }
-        if ($data == 36) {
-            $prefecture = '徳島県';
-        }
-        if ($data == 37) {
-            $prefecture = '香川県';
-        }
-        if ($data == 38) {
-            $prefecture = '愛媛県';
-        }
-        if ($data == 39) {
-            $prefecture = '高知県';
-        }
-        if ($data == 40) {
-            $prefecture = '福岡県';
-        }
-        if ($data == 41) {
-            $prefecture = '佐賀県';
-        }
-        if ($data == 42) {
-            $prefecture = '長崎県';
-        }
-        if ($data == 43) {
-            $prefecture = '熊本県';
-        }
-        if ($data == 44) {
-            $prefecture = '大分県';
-        }
-        if ($data == 45) {
-            $prefecture = '宮崎県';
-        }
-        if ($data == 46) {
-            $prefecture = '鹿児島';
-        }
-        if ($data == 47) {
-            $prefecture = '沖縄県';
-        }
+        $prefecture = self::prefectureOptions()[$data] ?? '';
 
         return $prefecture;
     }
 
     public static function wage_type($data)
     {
-        $wage_type = '';
-        if ($data == 0) {
-            $wage_type = '月給';
-        }
-        if ($data == 1) {
-            $wage_type = '時給';
-        }
+        $wage_type = self::wageTypeOptions()[$data] ?? '';
 
         return $wage_type;
     }
 
     public static function age_limit($data)
     {
-        $age_limit = '';
-
-        if ($data == 1) {
-            $age_limit = '~19歳';
-        }
-        if ($data == 2) {
-            $age_limit = '20歳~29歳';
-        }
-        if ($data == 3) {
-            $age_limit = '30歳~39歳';
-        }
-        if ($data == 4) {
-            $age_limit = '40歳~';
-        }
-        if ($data == 4) {
-            $age_limit = '年齢制限なし';
-        }
+        $age_limit = self::ageLimitOptions()[$data] ?? '';
 
         return $age_limit;
     }
 
+    public static function recruitment_status($data)
+    {
+        $recruitment_status = self::recruitmentStatusOptions()[$data] ?? '';
+
+        return $recruitment_status;
+    }
+
     public static function license($data)
     {
-        $license = '';
-
-        if ($data == 1) {
-            $license = 'AT';
-        }
-        if ($data == 2) {
-            $license = 'MT';
-        }
-        if ($data == 3) {
-            $license = '不問';
-        }
+        $license = self::licenseOptions()[$data] ?? '';
 
         return $license;
     }
 
     public static function experience($data)
     {
-        $experience = '';
-
-        if ($data == 1) {
-            $experience = '経験者';
-        }
-        if ($data == 2) {
-            $experience = '未経験者歓迎';
-        }
+        $experience = self::experienceOptions()[$data] ?? '';
 
         return $experience;
     }
 
     public static function status($data)
     {
-        $status = '';
-
-        if ($data == 1) {
-            $status = '正社員';
-        }
-        if ($data == 2) {
-            $status = '派遣';
-        }
-        if ($data == 3) {
-            $status = 'アルバイト';
-        }
+        $status = self::statusOptions()[$data] ?? '';
 
         return $status;
     }

@@ -47,6 +47,14 @@ class ApplicantController extends Controller
 
         $user = User::findOrFail(Auth::id());
         $job = Job::findOrFail($job);
+        if (!$job->isRecruiting()) {
+            return redirect()
+                ->route('user.dashboard')
+                ->with([
+                    'message' => '募集終了した求人には応募できません',
+                    'status' => 'alert'
+                ]);
+        }
 
         $prefecture = CheckForm::prefecture($job->prefectures_id);
         $status     = CheckForm::status($job->status);
@@ -96,6 +104,15 @@ class ApplicantController extends Controller
         }
 
         $job_info = Job::findOrFail($job);
+        if (!$job_info->isRecruiting()) {
+            return redirect()
+                ->route('user.dashboard')
+                ->with([
+                    'message' => '募集終了した求人には応募できません',
+                    'status' => 'alert'
+                ]);
+        }
+
         $user     = User::findOrFail(Auth::id());
 
         SendApplicantMail::dispatch($user, $job_info->owner);

@@ -9,12 +9,16 @@ class Job extends Model
 {
     use HasFactory;
 
+    public const RECRUITMENT_OPEN = 1;
+    public const RECRUITMENT_CLOSED = 2;
+
     protected $fillable = [
         'owner_id',
         'title',
         'description',
         'prefectures_id',
         'status',
+        'recruitment_status',
         'wage_type',
         'salary_amount',
         'img_name',
@@ -30,6 +34,11 @@ class Job extends Model
     public function owner()
     {
         return $this->belongsTo(Owner::class);
+    }
+
+    public function isRecruiting()
+    {
+        return (int) $this->recruitment_status === self::RECRUITMENT_OPEN;
     }
 
     public function applicants()

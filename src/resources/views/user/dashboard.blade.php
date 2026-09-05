@@ -10,6 +10,126 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <x-flash-message status="session('status')" />
+                    <x-auth-validation-errors class="mb-4" :errors="$errors" />
+                    <form method="GET" action="{{ route('user.dashboard') }}" class="mb-8 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <x-label for="prefectures_id" :value="__('都道府県')" />
+                                <select name="prefectures_id" id="prefectures_id"
+                                    class="mt-1 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full">
+                                    <option value="">指定なし</option>
+                                    @foreach ($searchOptions['prefectures'] as $value => $label)
+                                        <option value="{{ $value }}" {{ (string) request('prefectures_id') === (string) $value ? 'selected' : '' }}>
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
+                                <x-label for="status" :value="__('雇用形態')" />
+                                <select name="status" id="status"
+                                    class="mt-1 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full">
+                                    <option value="">指定なし</option>
+                                    @foreach ($searchOptions['statuses'] as $value => $label)
+                                        <option value="{{ $value }}" {{ (string) request('status') === (string) $value ? 'selected' : '' }}>
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
+                                <x-label for="recruitment_status" :value="__('募集状態')" />
+                                <select name="recruitment_status" id="recruitment_status"
+                                    class="mt-1 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full">
+                                    <option value="">指定なし</option>
+                                    @foreach ($searchOptions['recruitmentStatuses'] as $value => $label)
+                                        <option value="{{ $value }}" {{ (string) request('recruitment_status') === (string) $value ? 'selected' : '' }}>
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
+                                <x-label for="wage_type" :value="__('給与種別')" />
+                                <select name="wage_type" id="wage_type"
+                                    class="mt-1 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full">
+                                    <option value="">指定なし</option>
+                                    @foreach ($searchOptions['wageTypes'] as $value => $label)
+                                        <option value="{{ $value }}" {{ (string) request('wage_type') === (string) $value ? 'selected' : '' }}>
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
+                                <x-label for="salary_min" :value="__('給与下限')" />
+                                <input type="number" min="0" id="salary_min" name="salary_min"
+                                    value="{{ request('salary_min') }}"
+                                    class="mt-1 w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                            </div>
+
+                            <div>
+                                <x-label for="salary_max" :value="__('給与上限')" />
+                                <input type="number" min="0" id="salary_max" name="salary_max"
+                                    value="{{ request('salary_max') }}"
+                                    class="mt-1 w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                            </div>
+
+                            <div>
+                                <x-label for="age" :value="__('年齢条件')" />
+                                <select name="age" id="age"
+                                    class="mt-1 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full">
+                                    <option value="">指定なし</option>
+                                    @foreach ($searchOptions['ageLimits'] as $value => $label)
+                                        <option value="{{ $value }}" {{ (string) request('age') === (string) $value ? 'selected' : '' }}>
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
+                                <x-label for="license" :value="__('車免許')" />
+                                <select name="license" id="license"
+                                    class="mt-1 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full">
+                                    <option value="">指定なし</option>
+                                    @foreach ($searchOptions['licenses'] as $value => $label)
+                                        <option value="{{ $value }}" {{ (string) request('license') === (string) $value ? 'selected' : '' }}>
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
+                                <x-label for="experience" :value="__('経験')" />
+                                <select name="experience" id="experience"
+                                    class="mt-1 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full">
+                                    <option value="">指定なし</option>
+                                    @foreach ($searchOptions['experiences'] as $value => $label)
+                                        <option value="{{ $value }}" {{ (string) request('experience') === (string) $value ? 'selected' : '' }}>
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end gap-3 mt-4">
+                            <a href="{{ route('user.dashboard') }}"
+                                class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-50">
+                                クリア
+                            </a>
+                            <button type="submit"
+                                class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
+                                検索する
+                            </button>
+                        </div>
+                    </form>
                     <section class="text-gray-600 body-font">
                         <div class="container px-5 mx-auto">
                             @forelse ($jobs as $key => $job)
@@ -91,6 +211,17 @@
                                                                     class="block mt-1 w-full bg-gray-300 bg-opacity-50" />
                                                             </div>
                                                         </div> {{-- /Status --}}
+
+                                                        <div class="p-2 w-full">
+                                                            <div class="relative">
+                                                                <x-label for="recruitment_status" :value="__('募集状態')" />
+
+                                                                <x-input id="recruitment_status" type="text"
+                                                                    name="recruitment_status"
+                                                                    value="{{ $recruitment_status[$key] }}" disabled
+                                                                    class="block mt-1 w-full bg-gray-300 bg-opacity-50" />
+                                                            </div>
+                                                        </div>
 
                                                         {{-- Salaly --}}
                                                         <div class="p-2 w-full">
@@ -184,7 +315,10 @@
                                                         class="cursor-pointer inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-400 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150" />
                                                 </form>
                                             @endif
-                                            @if (is_null($applicant_list[$key]))
+                                            @if (is_null($applicant_list[$key]) && !$job->isRecruiting())
+                                                <input type="submit" value="募集終了" disabled
+                                                    class="cursor-pointer inline-flex items-center px-4 py-2 bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest disabled:opacity-25 transition ease-in-out duration-150" />
+                                            @elseif (is_null($applicant_list[$key]))
                                                 <form
                                                     action="{{ route('user.applicant.create', ['job' => $job->id]) }}"
                                                     method="get">

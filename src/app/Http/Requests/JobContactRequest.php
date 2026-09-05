@@ -29,6 +29,7 @@ class JobContactRequest extends FormRequest
             'description' => 'required|string|max:1000',
             'prefectures_id' => 'required|string|max:2',
             'status' => 'required|string|max:2',
+            'recruitment_status' => 'required|string|max:2',
             'wage_type' => 'required|string|max:2',
             'salary_amount' => 'required|string|max:8',
             'img' => 'image|mimes:jpg,jpeg,png|max:2048',
