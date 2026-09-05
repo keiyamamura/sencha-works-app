@@ -60,6 +60,14 @@ Database: sencha_works
 
 For host-side database clients, connect to `127.0.0.1:3307`.
 
+## Mail
+
+Open the mail inbox:
+
+```text
+http://localhost:8025
+```
+
 ## Stop
 
 ```bash

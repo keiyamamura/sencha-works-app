@@ -24,6 +24,8 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+      mailhog:
+        condition: service_started
 
   mysql:
     image: mysql:8.0
@@ -54,6 +56,14 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+
+  mailhog:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"
+    environment:
+      MP_SMTP_BIND_ADDR: 0.0.0.0:1025
+      MP_UI_BIND_ADDR: 0.0.0.0:8025
 
 volumes:
   composer-cache:
