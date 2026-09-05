@@ -12,7 +12,7 @@ class NotAdoptedMail extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
-    public $job;
+    public $targetJob;
 
     /**
      * Create a new message instance.
@@ -22,7 +22,7 @@ class NotAdoptedMail extends Mailable
     public function __construct($user, $job)
     {
         $this->user = $user;
-        $this->job = $job;
+        $this->targetJob = $job;
     }
 
     /**
@@ -37,7 +37,7 @@ class NotAdoptedMail extends Mailable
             ->view('emails.not_adopted')
             ->with([
                 'user' => $this->user,
-                'job'  => $this->job
+                'job'  => $this->targetJob
             ]);
     }
 }

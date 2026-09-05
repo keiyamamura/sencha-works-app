@@ -15,7 +15,7 @@ class SendNotAdoptedMail implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $user;
-    public $job;
+    public $targetJob;
 
     /**
      * Create a new job instance.
@@ -25,7 +25,7 @@ class SendNotAdoptedMail implements ShouldQueue
     public function __construct($user, $job)
     {
         $this->user = $user;
-        $this->job = $job;
+        $this->targetJob = $job;
     }
 
     /**
@@ -35,6 +35,6 @@ class SendNotAdoptedMail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->user)->send(new NotAdoptedMail($this->user, $this->job));
+        Mail::to($this->user)->send(new NotAdoptedMail($this->user, $this->targetJob));
     }
 }
