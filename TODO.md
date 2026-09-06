@@ -34,11 +34,11 @@
 
 ### バリデーション / 重複防止
 
-- [ ] お気に入り登録の重複防止
-- [ ] 応募登録の重複防止
-- [ ] DB 制約として以下の unique を検討する
-  - [ ] `favorites`: `user_id + job_id`
-  - [ ] `applicants`: `user_id + job_id`
+- [x] お気に入り登録の重複防止
+- [x] 応募登録の重複防止
+- [x] DB 制約として以下の unique を検討する
+  - [x] `favorites`: `user_id + job_id`
+  - [x] `applicants`: `user_id + job_id`
 
 ## 優先度 中
 

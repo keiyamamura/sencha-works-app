@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Jobs\SendConsentMail;
 use App\Jobs\SendApplicantMail;
 use App\Jobs\SendNotAdoptedMail;
+use Illuminate\Database\QueryException;
 
 class ApplicantController extends Controller
 {
@@ -35,12 +36,11 @@ class ApplicantController extends Controller
 
     public function create($job)
     {
-        $applicant_list = Applicant::where('user_id', Auth::id())->where('job_id', $job)->get();
-        if ($applicant_list->isNotEmpty()) {
+        if (Applicant::where('user_id', Auth::id())->where('job_id', $job)->exists()) {
             return redirect()
                 ->route('user.dashboard')
                 ->with([
-                    'message' => '不正な操作が行われました',
+                    'message' => 'すでに応募済みです',
                     'status' => 'alert'
                 ]);
         }
@@ -92,13 +92,11 @@ class ApplicantController extends Controller
 
     public function store($job)
     {
-        $applicant_list = Applicant::where('user_id', Auth::id())->where('job_id', $job)->get();
-
-        if ($applicant_list->isNotEmpty()) {
+        if (Applicant::where('user_id', Auth::id())->where('job_id', $job)->exists()) {
             return redirect()
                 ->route('user.dashboard')
                 ->with([
-                    'message' => '不正な操作が行われました',
+                    'message' => 'すでに応募済みです',
                     'status' => 'alert'
                 ]);
         }
@@ -115,13 +113,22 @@ class ApplicantController extends Controller
 
         $user     = User::findOrFail(Auth::id());
 
-        SendApplicantMail::dispatch($user, $job_info->owner);
+        try {
+            Applicant::create([
+                'user_id' => Auth::id(),
+                'job_id' => $job,
+                'consent_flg' => Applicant::STATUS_PENDING,
+            ]);
+        } catch (QueryException $e) {
+            return redirect()
+                ->route('user.dashboard')
+                ->with([
+                    'message' => 'すでに応募済みです',
+                    'status' => 'alert'
+                ]);
+        }
 
-        Applicant::create([
-            'user_id' => Auth::id(),
-            'job_id' => $job,
-            'consent_flg' => Applicant::STATUS_PENDING,
-        ]);
+        SendApplicantMail::dispatch($user, $job_info->owner);
 
         return redirect()
             ->route('user.dashboard')

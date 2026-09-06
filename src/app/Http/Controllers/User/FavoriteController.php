@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Applicant;
 use App\Models\Favorite;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Services\CheckForm;
 
@@ -53,10 +54,28 @@ class FavoriteController extends Controller
                 ]);
         }
 
-        Favorite::create([
-            'user_id' => Auth::id(),
-            'job_id'  => $job
-        ]);
+        if (Favorite::where('user_id', Auth::id())->where('job_id', $job)->exists()) {
+            return redirect()
+                ->route('user.dashboard')
+                ->with([
+                    'message' => 'すでにお気に入り登録済みです。',
+                    'status' => 'alert'
+                ]);
+        }
+
+        try {
+            Favorite::create([
+                'user_id' => Auth::id(),
+                'job_id'  => $job
+            ]);
+        } catch (QueryException $e) {
+            return redirect()
+                ->route('user.dashboard')
+                ->with([
+                    'message' => 'すでにお気に入り登録済みです。',
+                    'status' => 'alert'
+                ]);
+        }
 
         return redirect()
             ->route('user.dashboard')
@@ -77,9 +96,17 @@ class FavoriteController extends Controller
                 ]);
         }
 
-        $favorite_info = Favorite::where('user_id', Auth::id())->where('job_id', $job)->first();
-        $favorite = Favorite::findOrFail($favorite_info->id);
-        $favorite->delete($favorite->id);
+        $favorite = Favorite::where('user_id', Auth::id())->where('job_id', $job)->first();
+        if (is_null($favorite)) {
+            return redirect()
+                ->route('user.dashboard')
+                ->with([
+                    'message' => 'お気に入り登録されていません。',
+                    'status' => 'alert'
+                ]);
+        }
+
+        $favorite->delete();
 
         return redirect()
             ->route('user.dashboard')
