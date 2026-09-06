@@ -19,6 +19,23 @@
                                     </h1>
                                 </div>
                                 {{-- <span class="text-sm">{!! nl2br(e($job->description)) !!}</span> --}}
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                                    <a href="{{ route('owner.dashboard') }}"
+                                        class="block border border-gray-200 rounded p-4 hover:bg-gray-50">
+                                        <p class="text-sm text-gray-500">登録求人</p>
+                                        <p class="text-3xl font-semibold text-gray-900">{{ $jobsCount }}</p>
+                                    </a>
+                                    <a href="{{ route('owner.applicant.index') }}"
+                                        class="block border border-gray-200 rounded p-4 hover:bg-gray-50">
+                                        <p class="text-sm text-gray-500">応募者一覧</p>
+                                        <p class="text-3xl font-semibold text-gray-900">{{ $applicantsCount }}</p>
+                                    </a>
+                                    <a href="{{ route('owner.applicant.index') }}"
+                                        class="block border border-gray-200 rounded p-4 hover:bg-gray-50">
+                                        <p class="text-sm text-gray-500">未処理の応募</p>
+                                        <p class="text-3xl font-semibold text-gray-900">{{ $pendingApplicantsCount }}</p>
+                                    </a>
+                                </div>
                                 <div class="flex justify-around mt-6 items-start pb-5 my-5">
                                     <div class="flex flex-col w-1/2 border-r-2 border-gray-300 pr-3">
                                         <div class="flex flex-wrap sm:mb-4 -m-2">

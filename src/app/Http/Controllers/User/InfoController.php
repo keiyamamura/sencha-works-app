@@ -4,6 +4,8 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Services\CheckForm;
+use App\Models\Applicant;
+use App\Models\Favorite;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,8 +28,13 @@ class InfoController extends Controller
         $prefecture  = CheckForm::prefecture($user->prefectures_id);
         $gender      = CheckForm::gender($user->gender);
         $current_job = CheckForm::current_job($user->current_job);
+        $applicantsCount = Applicant::where('user_id', Auth::id())->count();
+        $acceptedCount = Applicant::where('user_id', Auth::id())
+            ->where('consent_flg', Applicant::STATUS_ACCEPTED)
+            ->count();
+        $favoritesCount = Favorite::where('user_id', Auth::id())->count();
 
-        return view('user.info.show', compact('user', 'age', 'prefecture', 'gender', 'current_job'));
+        return view('user.info.show', compact('user', 'age', 'prefecture', 'gender', 'current_job', 'applicantsCount', 'acceptedCount', 'favoritesCount'));
     }
 
     public function edit($id)

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Owner;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Services\CheckForm;
+use App\Models\Applicant;
+use App\Models\Job;
 use App\Models\Owner;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,17 +15,42 @@ class InfoController extends Controller
     public function show($id)
     {
         $owner = Owner::findOrFail($id);
+        if ($owner->id !== Auth::id()) {
+            return redirect()
+                ->route('owner.dashboard')
+                ->with([
+                    'message' => '許可されていない操作です。',
+                    'status' => 'alert'
+                ]);
+        }
 
         $age = CheckForm::age($owner->age);
         $prefecture = CheckForm::prefecture($owner->prefectures_id);
         $gender = CheckForm::gender($owner->gender);
+        $jobsCount = Job::where('owner_id', Auth::id())->count();
+        $applicantsCount = Applicant::whereHas('job', function ($query) {
+            $query->where('owner_id', Auth::id());
+        })->count();
+        $pendingApplicantsCount = Applicant::where('consent_flg', Applicant::STATUS_PENDING)
+            ->whereHas('job', function ($query) {
+                $query->where('owner_id', Auth::id());
+            })
+            ->count();
 
-        return view('owner.info.show', compact('owner', 'age', 'prefecture', 'gender'));
+        return view('owner.info.show', compact('owner', 'age', 'prefecture', 'gender', 'jobsCount', 'applicantsCount', 'pendingApplicantsCount'));
     }
 
     public function edit($id)
     {
         $owner = Owner::findOrFail($id);
+        if ($owner->id !== Auth::id()) {
+            return redirect()
+                ->route('owner.dashboard')
+                ->with([
+                    'message' => '許可されていない操作です。',
+                    'status' => 'alert'
+                ]);
+        }
 
         return view('owner.info.edit', compact('owner'));
     }
@@ -40,6 +67,14 @@ class InfoController extends Controller
         ]);
 
         $owner = Owner::findOrFail($id);
+        if ($owner->id !== Auth::id()) {
+            return redirect()
+                ->route('owner.dashboard')
+                ->with([
+                    'message' => '許可されていない操作です。',
+                    'status' => 'alert'
+                ]);
+        }
         $owner->name = $request->name;
         $owner->age = $request->age;
         $owner->gender = $request->gender;

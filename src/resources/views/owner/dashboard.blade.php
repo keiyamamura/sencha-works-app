@@ -55,6 +55,28 @@
                                                 {{ $job->title }}
                                             </h2>
                                         </div>
+                                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+                                            <a href="{{ route('owner.applicant.index') }}"
+                                                class="block border border-gray-200 rounded p-3 hover:bg-gray-50">
+                                                <p class="text-xs text-gray-500">応募数</p>
+                                                <p class="text-2xl font-semibold text-gray-900">{{ $job->applicants_count }}</p>
+                                            </a>
+                                            <a href="{{ route('owner.applicant.index') }}"
+                                                class="block border border-gray-200 rounded p-3 hover:bg-gray-50">
+                                                <p class="text-xs text-gray-500">応募中</p>
+                                                <p class="text-2xl font-semibold text-gray-900">{{ $job->pending_applicants_count }}</p>
+                                            </a>
+                                            <a href="{{ route('owner.applicant.index') }}"
+                                                class="block border border-gray-200 rounded p-3 hover:bg-gray-50">
+                                                <p class="text-xs text-gray-500">承諾</p>
+                                                <p class="text-2xl font-semibold text-gray-900">{{ $job->accepted_applicants_count }}</p>
+                                            </a>
+                                            <a href="{{ route('owner.applicant.index') }}"
+                                                class="block border border-gray-200 rounded p-3 hover:bg-gray-50">
+                                                <p class="text-xs text-gray-500">不採用</p>
+                                                <p class="text-2xl font-semibold text-gray-900">{{ $job->rejected_applicants_count }}</p>
+                                            </a>
+                                        </div>
 
                                         {{-- Description --}}
                                         <div class="p-2 w-full">

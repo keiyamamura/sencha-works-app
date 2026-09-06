@@ -31,6 +31,10 @@ Route::middleware(['auth:users'])->group(function () {
         ->name('dashboard');
 
     Route::prefix('applicant')->name('applicant.')->group(function () {
+        Route::get('list', [ApplicantController::class, 'list'])
+            ->name('list');
+        Route::get('accepted', [ApplicantController::class, 'accepted'])
+            ->name('accepted');
         Route::get('create/{job}', [ApplicantController::class, 'create'])
             ->name('create');
         Route::post('store/{job}', [ApplicantController::class, 'store'])

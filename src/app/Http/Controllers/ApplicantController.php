@@ -16,10 +16,38 @@ use Illuminate\Database\QueryException;
 
 class ApplicantController extends Controller
 {
+    public function list()
+    {
+        $applicants = Applicant::with('job')
+            ->where('user_id', Auth::id())
+            ->orderby('created_at', 'desc')
+            ->paginate(10);
+
+        return view('user.applicant.list', [
+            'applicants' => $applicants,
+            'title' => '応募履歴',
+            'emptyMessage' => '応募履歴がありません',
+        ]);
+    }
+
+    public function accepted()
+    {
+        $applicants = Applicant::with('job')
+            ->where('user_id', Auth::id())
+            ->where('consent_flg', Applicant::STATUS_ACCEPTED)
+            ->orderby('created_at', 'desc')
+            ->paginate(10);
+
+        return view('user.applicant.list', [
+            'applicants' => $applicants,
+            'title' => '承諾済み求人',
+            'emptyMessage' => '承諾済み求人はありません',
+        ]);
+    }
+
     public function index()
     {
         $applicants = Applicant::with(['user', 'job'])
-            ->where('consent_flg', Applicant::STATUS_PENDING)
             ->whereHas('job', function ($query) {
                 $query->where('owner_id', Auth::id());
             })

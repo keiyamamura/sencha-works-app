@@ -24,6 +24,11 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('user.applicant.list')" :active="request()->routeIs('user.applicant.*')">
+                        {{ __('応募履歴') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('user.info.show', ['id' => Auth::id()])" :active="request()->routeIs('user.info.show')">
                         {{ __('会員情報') }}
                     </x-nav-link>
@@ -82,6 +87,11 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('user.favorite.list')" :active="request()->routeIs('user.favorite.list')">
                 {{ __('お気に入り一覧') }}
+            </x-responsive-nav-link>
+        </div>
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('user.applicant.list')" :active="request()->routeIs('user.applicant.*')">
+                {{ __('応募履歴') }}
             </x-responsive-nav-link>
         </div>
         <div class="pt-2 pb-3 space-y-1">

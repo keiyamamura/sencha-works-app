@@ -39,7 +39,21 @@ class JobController extends Controller
      */
     public function index()
     {
-        $jobs = Job::whereOwner_id(Auth::id())->orderby('created_at', 'desc')->get();
+        $jobs = Job::withCount([
+            'applicants',
+            'applicants as pending_applicants_count' => function ($query) {
+                $query->where('consent_flg', Applicant::STATUS_PENDING);
+            },
+            'applicants as accepted_applicants_count' => function ($query) {
+                $query->where('consent_flg', Applicant::STATUS_ACCEPTED);
+            },
+            'applicants as rejected_applicants_count' => function ($query) {
+                $query->where('consent_flg', Applicant::STATUS_REJECTED);
+            },
+        ])
+            ->whereOwner_id(Auth::id())
+            ->orderby('created_at', 'desc')
+            ->get();
 
         $prefecture = [];
         $status = [];
