@@ -83,6 +83,14 @@ class CheckForm
         ];
     }
 
+    public static function publicStatusOptions()
+    {
+        return [
+            1 => '公開',
+            2 => '非公開',
+        ];
+    }
+
     public static function ageLimitOptions()
     {
         return [
@@ -315,6 +323,13 @@ class CheckForm
         $recruitment_status = self::recruitmentStatusOptions()[$data] ?? '';
 
         return $recruitment_status;
+    }
+
+    public static function public_status($data)
+    {
+        $public_status = self::publicStatusOptions()[$data] ?? '';
+
+        return $public_status;
     }
 
     public static function license($data)

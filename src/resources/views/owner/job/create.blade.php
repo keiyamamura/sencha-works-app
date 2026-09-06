@@ -228,6 +228,22 @@
                                                     </select>
                                                 </div>
                                             </div>
+
+                                            <div class="p-2 w-full">
+                                                <div class="relative">
+                                                    <x-label for="public_status" :value="__('公開状態')" />
+                                                    <select name="public_status" id="public_status" required
+                                                        class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full">
+                                                        <option value="">選択してください</option>
+                                                        <option value="1"
+                                                            {{ old('public_status', 1) == 1 ? 'selected' : '' }}>
+                                                            公開</option>
+                                                        <option value="2"
+                                                            {{ old('public_status') == 2 ? 'selected' : '' }}>
+                                                            非公開</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div> {{-- /Left --}}
 

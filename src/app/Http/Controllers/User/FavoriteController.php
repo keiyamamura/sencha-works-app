@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Applicant;
 use App\Models\Favorite;
+use App\Models\Job;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Services\CheckForm;
@@ -17,6 +18,7 @@ class FavoriteController extends Controller
     {
         $favorites = Favorite::where('user_id', Auth::id())
         ->join('jobs', 'jobs.id', '=', 'favorites.job_id')
+        ->where('jobs.public_status', Job::PUBLIC_OPEN)
         ->orderby('favorites.created_at', 'desc')
         ->paginate(10);
 
@@ -45,12 +47,22 @@ class FavoriteController extends Controller
 
     public function store(int $user, $job)
     {
-        if (!DB::table('jobs')->where('id', $job)->exists() || $user != Auth::id()) {
+        $jobInfo = Job::find($job);
+        if (is_null($jobInfo) || $user != Auth::id()) {
             return redirect()
                 ->route('user.dashboard')
                 ->with([
                     'message' => '不正な操作が行われました',
                     'status'  => 'alert'
+                ]);
+        }
+
+        if (!$jobInfo->isPublished()) {
+            return redirect()
+                ->route('user.dashboard')
+                ->with([
+                    'message' => 'この求人は現在公開されていません',
+                    'status' => 'alert'
                 ]);
         }
 

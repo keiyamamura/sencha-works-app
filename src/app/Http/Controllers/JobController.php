@@ -22,6 +22,7 @@ class JobController extends Controller
         'prefectures_id',
         'status',
         'recruitment_status',
+        'public_status',
         'wage_type',
         'salary_amount',
         'age',
@@ -58,6 +59,7 @@ class JobController extends Controller
         $prefecture = [];
         $status = [];
         $recruitment_status = [];
+        $public_status = [];
         $experience = [];
         $license = [];
         $age_limit = [];
@@ -66,12 +68,13 @@ class JobController extends Controller
             $prefecture[] = CheckForm::prefecture($job->prefectures_id);
             $status[]     = CheckForm::status($job->status);
             $recruitment_status[] = CheckForm::recruitment_status($job->recruitment_status);
+            $public_status[] = CheckForm::public_status($job->public_status);
             $experience[] = CheckForm::experience($job->experience);
             $license[]    = CheckForm::license($job->license);
             $age_limit[]  = CheckForm::age_limit($job->age);
         }
 
-        return view('owner.dashboard', compact('jobs', 'prefecture', 'status', 'recruitment_status', 'experience', 'license', 'age_limit'));
+        return view('owner.dashboard', compact('jobs', 'prefecture', 'status', 'recruitment_status', 'public_status', 'experience', 'license', 'age_limit'));
     }
 
     public function list(Request $request)
@@ -88,7 +91,7 @@ class JobController extends Controller
             'experience' => 'nullable|integer|between:1,2',
         ]);
 
-        $jobsQuery = Job::query();
+        $jobsQuery = Job::where('public_status', Job::PUBLIC_OPEN);
 
         if ($request->filled('prefectures_id')) {
             $jobsQuery->where('prefectures_id', $filters['prefectures_id']);
@@ -202,11 +205,12 @@ class JobController extends Controller
         $prefecture = CheckForm::prefecture($input['prefectures_id']);
         $status     = CheckForm::status($input['status']);
         $recruitment_status = CheckForm::recruitment_status($input['recruitment_status']);
+        $public_status = CheckForm::public_status($input['public_status']);
         $experience = CheckForm::experience($input['experience']);
         $license    = CheckForm::license($input['license']);
         $age_limit  = CheckForm::age_limit($input['age']);
 
-        return view('owner.job.confirm', compact('input', 'prefecture', 'status', 'recruitment_status', 'experience', 'license', 'age_limit', 'imagePath'));
+        return view('owner.job.confirm', compact('input', 'prefecture', 'status', 'recruitment_status', 'public_status', 'experience', 'license', 'age_limit', 'imagePath'));
     }
 
     /**
@@ -255,6 +259,14 @@ class JobController extends Controller
     public function show($id)
     {
         $job = Job::findOrFail($id);
+        if (!$job->isPublished()) {
+            return redirect()
+                ->route('user.dashboard')
+                ->with([
+                    'message' => 'この求人は現在公開されていません',
+                    'status' => 'alert'
+                ]);
+        }
 
         $prefecture = CheckForm::prefecture($job->prefectures_id);
         $status     = CheckForm::status($job->status);
@@ -324,6 +336,7 @@ class JobController extends Controller
         $job->prefectures_id = $request->prefectures_id;
         $job->status         = $request->status;
         $job->recruitment_status = $request->recruitment_status;
+        $job->public_status = $request->public_status;
         $job->wage_type      = $request->wage_type;
         $job->salary_amount  = $request->salary_amount;
         $job->age            = $request->age;
@@ -367,6 +380,52 @@ class JobController extends Controller
             ->with([
                 'message' => '求人情報の削除が完了しました。',
                 'status'  => 'info'
+            ]);
+    }
+
+    public function togglePublicStatus($id)
+    {
+        $job = Job::findOrFail($id);
+        if ($job->owner_id !== Auth::id()) {
+            return redirect()
+                ->route('owner.dashboard')
+                ->with([
+                    'message' => '許可されていない操作です。',
+                    'status' => 'alert'
+                ]);
+        }
+
+        $job->public_status = $job->isPublished() ? Job::PUBLIC_CLOSED : Job::PUBLIC_OPEN;
+        $job->save();
+
+        return redirect()
+            ->route('owner.dashboard')
+            ->with([
+                'message' => '公開状態を更新しました。',
+                'status' => 'info'
+            ]);
+    }
+
+    public function toggleRecruitmentStatus($id)
+    {
+        $job = Job::findOrFail($id);
+        if ($job->owner_id !== Auth::id()) {
+            return redirect()
+                ->route('owner.dashboard')
+                ->with([
+                    'message' => '許可されていない操作です。',
+                    'status' => 'alert'
+                ]);
+        }
+
+        $job->recruitment_status = $job->isRecruiting() ? Job::RECRUITMENT_CLOSED : Job::RECRUITMENT_OPEN;
+        $job->save();
+
+        return redirect()
+            ->route('owner.dashboard')
+            ->with([
+                'message' => '募集状態を更新しました。',
+                'status' => 'info'
             ]);
     }
 }

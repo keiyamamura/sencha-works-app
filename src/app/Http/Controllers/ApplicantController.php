@@ -75,6 +75,15 @@ class ApplicantController extends Controller
 
         $user = User::findOrFail(Auth::id());
         $job = Job::findOrFail($job);
+        if (!$job->isPublished()) {
+            return redirect()
+                ->route('user.dashboard')
+                ->with([
+                    'message' => 'この求人は現在公開されていません',
+                    'status' => 'alert'
+                ]);
+        }
+
         if (!$job->isRecruiting()) {
             return redirect()
                 ->route('user.dashboard')
@@ -130,6 +139,15 @@ class ApplicantController extends Controller
         }
 
         $job_info = Job::findOrFail($job);
+        if (!$job_info->isPublished()) {
+            return redirect()
+                ->route('user.dashboard')
+                ->with([
+                    'message' => 'この求人は現在公開されていません',
+                    'status' => 'alert'
+                ]);
+        }
+
         if (!$job_info->isRecruiting()) {
             return redirect()
                 ->route('user.dashboard')

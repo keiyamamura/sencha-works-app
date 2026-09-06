@@ -74,6 +74,17 @@
                                                         class="block mt-1 w-full bg-gray-300 bg-opacity-50" />
                                                 </div>
                                             </div>
+
+                                            <div class="p-2 w-full">
+                                                <div class="relative">
+                                                    <x-label for="public_status" :value="__('公開状態')" />
+
+                                                    <x-input id="public_status" type="text"
+                                                        name="public_status"
+                                                        value="{{ $public_status }}" disabled
+                                                        class="block mt-1 w-full bg-gray-300 bg-opacity-50" />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div> {{-- /Left --}}
 

@@ -45,6 +45,10 @@ Route::middleware(['auth:owners'])->group(function () {
         ->name('job.edit');
     Route::post('/job/update/{id}', [JobController::class, 'update'])
         ->name('job.update');
+    Route::post('/job/toggle-public-status/{id}', [JobController::class, 'togglePublicStatus'])
+        ->name('job.toggle-public-status');
+    Route::post('/job/toggle-recruitment-status/{id}', [JobController::class, 'toggleRecruitmentStatus'])
+        ->name('job.toggle-recruitment-status');
     Route::post('/job/destroy/{id}', [JobController::class, 'destroy'])
         ->name('job.destroy');
 

@@ -125,6 +125,17 @@
                                                             </div>
                                                         </div>
 
+                                                        <div class="p-2 w-full">
+                                                            <div class="relative">
+                                                                <x-label for="public_status" :value="__('公開状態')" />
+
+                                                                <x-input id="public_status" type="text"
+                                                                    name="public_status"
+                                                                    value="{{ $public_status[$key] }}" disabled
+                                                                    class="block mt-1 w-full bg-gray-300 bg-opacity-50" />
+                                                            </div>
+                                                        </div>
+
                                                         {{-- Salaly --}}
                                                         <div class="p-2 w-full">
                                                             <div class="relative">
@@ -189,7 +200,21 @@
                                                 </div>{{-- /Qualifications --}}
                                             </div>
                                         </div>
-                                        <div class="text-right cursor-pointer">
+                                        <div class="flex flex-wrap justify-end gap-3 mt-3">
+                                            <form action="{{ route('owner.job.toggle-public-status', ['id' => $job->id]) }}"
+                                                method="post">
+                                                @csrf
+                                                <input type="submit"
+                                                    value="{{ $job->isPublished() ? '非公開にする' : '公開する' }}"
+                                                    class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 transition ease-in-out duration-150 cursor-pointer">
+                                            </form>
+                                            <form action="{{ route('owner.job.toggle-recruitment-status', ['id' => $job->id]) }}"
+                                                method="post">
+                                                @csrf
+                                                <input type="submit"
+                                                    value="{{ $job->isRecruiting() ? '募集終了にする' : '募集中にする' }}"
+                                                    class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 transition ease-in-out duration-150 cursor-pointer">
+                                            </form>
                                             <a href="{{ route('owner.job.edit', ['id' => $job->id]) }}"
                                                 class="text-indigo-500 inline-flex items-center mt-3">編集する
                                                 <svg fill="none" stroke="currentColor" stroke-linecap="round"

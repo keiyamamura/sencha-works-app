@@ -11,6 +11,8 @@ class Job extends Model
 
     public const RECRUITMENT_OPEN = 1;
     public const RECRUITMENT_CLOSED = 2;
+    public const PUBLIC_OPEN = 1;
+    public const PUBLIC_CLOSED = 2;
 
     protected $fillable = [
         'owner_id',
@@ -19,6 +21,7 @@ class Job extends Model
         'prefectures_id',
         'status',
         'recruitment_status',
+        'public_status',
         'wage_type',
         'salary_amount',
         'img_name',
@@ -39,6 +42,11 @@ class Job extends Model
     public function isRecruiting()
     {
         return (int) $this->recruitment_status === self::RECRUITMENT_OPEN;
+    }
+
+    public function isPublished()
+    {
+        return (int) $this->public_status === self::PUBLIC_OPEN;
     }
 
     public function applicants()
